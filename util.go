@@ -104,6 +104,16 @@ func gamma(options *Options) Gamma {
 	}
 }
 
+func score(q, i int64) float64 {
+	if q < i {
+		return 0.0
+	}
+	if q > i {
+		return 1.0
+	}
+	return 0.5
+}
+
 func unwind[T constraints.Integer, R any](order []T, collection []R) (sortedCollection []R, stochasticTenet []T) {
 	if len(collection) <= 0 {
 		sortedCollection = make([]R, 0)

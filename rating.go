@@ -1,11 +1,13 @@
 package openskill
 
+// NewRatingParams represents the values that help initilize a rating.
 type NewRatingParams struct {
 	AveragePlayerSkill     float64
 	SkillUncertaintyDegree float64
 }
 
-// NewRating creates a new Rating, with optional initializing rating values and a optional set of default constants
+// NewRating creates a new Rating, with optional initializing rating values and a optional set of default constants.
+// Useful when not creating ratings in a vacuum.
 func NewRating(init *NewRatingParams, options *Options) *Rating {
 	var (
 		_mu, _sigma float64

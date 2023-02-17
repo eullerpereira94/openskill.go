@@ -18,8 +18,8 @@ func Rate(teams []Team, options Options) []Team {
 		model = PlackettLuce
 	}
 
-	if options.tau != nil {
-		tauSquared := math.Pow(*options.tau, 2)
+	if options.Tau != nil {
+		tauSquared := math.Pow(*options.Tau, 2)
 
 		processedTeams = lo.Map(teams, func(item Team, index int) Team {
 			return lo.Map([]*Rating(item), func(item *Rating, index int) *Rating {
@@ -60,7 +60,7 @@ func Rate(teams []Team, options Options) []Team {
 
 	reorderedTeams, _ := unwind(tenet, newRatings)
 
-	if options.tau != nil && options.PreventUncertaintyIncrease != nil && *options.PreventUncertaintyIncrease {
+	if options.Tau != nil && options.PreventUncertaintyIncrease != nil && *options.PreventUncertaintyIncrease {
 		reorderedTeams = lo.Map(reorderedTeams, func(item Team, index int) Team {
 			return lo.Map([]*Rating(item), func(localItem *Rating, localIndex int) *Rating {
 				localItem.SkillUncertaintyDegree = math.Min(localItem.SkillUncertaintyDegree, teams[index][localIndex].SkillUncertaintyDegree)

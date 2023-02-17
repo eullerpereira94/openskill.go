@@ -1,8 +1,8 @@
 package openskill
 
 func z(options *Options) float64 {
-	if options != nil && options.NormalizedPlayerSkill != nil {
-		return *options.NormalizedPlayerSkill
+	if options != nil && options.StandardizedPlayerSkill != nil {
+		return *options.StandardizedPlayerSkill
 	}
 	return 3
 }
@@ -14,10 +14,10 @@ func mu(options *Options) float64 {
 	return 25
 }
 
-// tau is kept here for the sake of keeping a similar structure to the original code, even though is unused
+// this tau function is kept here for the sake of keeping a similar structure to the original code, even though is unused
 func tau(options *Options) float64 {
-	if options != nil && options.tau != nil {
-		return *options.tau
+	if options != nil && options.Tau != nil {
+		return *options.Tau
 	}
 	return mu(options) / 300
 }
