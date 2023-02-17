@@ -15,30 +15,25 @@ func PlackettLuce(game []Team, options *Options) []Team {
 	a := utilA(teamRatings)
 	gamma := gamma(options)
 
-	return lo.Map(teamRatings, func(item teamRating, index int) Team {
+	return lo.Map(teamRatings, func(item *teamRating, index int) Team {
 		iMuOverCe := math.Exp(item.TeamMu / c)
 
-		type _sums struct {
-			omegaSum float64
-			deltaSum float64
-		}
-
-		filteredRatings := lo.Filter(teamRatings, func(localItem teamRating, localIndex int) bool {
+		filteredRatings := lo.Filter(teamRatings, func(localItem *teamRating, localIndex int) bool {
 			return localItem.Rank <= item.Rank
 		})
 
-		sums := lo.Reduce(filteredRatings, func(agg _sums, item teamRating, localIndex int) _sums {
+		_sums := lo.Reduce(filteredRatings, func(agg sums, item *teamRating, localIndex int) sums {
 			quotient := iMuOverCe / sumQ[localIndex]
 
 			agg.omegaSum = agg.omegaSum + lo.Ternary(index == localIndex, 1-quotient, -quotient)/float64(a[localIndex])
 			agg.deltaSum = agg.deltaSum + (quotient*(1-quotient))/float64(a[localIndex])
 
 			return agg
-		}, _sums{omegaSum: 0, deltaSum: 0})
+		}, sums{omegaSum: 0, deltaSum: 0})
 
 		iGamma := gamma(c, int64(len(teamRatings)), item.TeamMu, item.TeamSigmaSq, item.Team, item.Rank)
-		iOmega := sums.omegaSum * (item.TeamSigmaSq / c)
-		iDelta := iGamma * sums.deltaSum * (item.TeamSigmaSq / math.Pow(c, 2))
+		iOmega := _sums.omegaSum * (item.TeamSigmaSq / c)
+		iDelta := iGamma * _sums.deltaSum * (item.TeamSigmaSq / math.Pow(c, 2))
 
 		result := lo.Map([]*Rating(*item.Team), func(finalItem *Rating, index int) *Rating {
 			return &Rating{
