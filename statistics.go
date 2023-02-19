@@ -9,7 +9,7 @@ import (
 const mean float64 = 0.0
 const variance float64 = 1.0
 
-// phiMajor
+// phiMinor
 func pdf(x float64) float64 {
 	standardDeviation := math.Sqrt(variance)
 	m := standardDeviation * math.Sqrt(2*math.Pi)
@@ -17,13 +17,13 @@ func pdf(x float64) float64 {
 	return e / m
 }
 
-// phiMinor
+// phiMajor
 func cdf(x float64) float64 {
 	standardDeviation := math.Sqrt(variance)
 	return 0.5 * math.Erfc(-(x-mean)/(standardDeviation*math.Sqrt(2)))
 }
 
-// phiMajorInverse, not used but kept
+// phiMajorInverse
 func ppf(x float64) float64 {
 	standardDeviation := math.Sqrt(variance)
 	return mean - standardDeviation*math.Sqrt(2)*math.Erfcinv(2*x)
