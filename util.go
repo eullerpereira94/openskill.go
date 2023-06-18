@@ -44,7 +44,12 @@ func rankings(teams []Team, ranks []int64) []int64 {
 
 func teamRatings(options *Options) func(game []Team) []*teamRating {
 	return func(game []Team) []*teamRating {
-		rank := rankings(game, options.Rankings)
+		var rank []int64
+		if options != nil && options.Rankings != nil {
+			rank = rankings(game, options.Rankings)
+		} else {
+			rank = rankings(game, []int64{})
+		}
 
 		return lo.Map(game, func(item Team, index int) *teamRating {
 			mu := lo.Sum(lo.Map([]*Rating(item), func(item *Rating, index int) float64 {
